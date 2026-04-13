@@ -80,6 +80,7 @@
     <button id="btnPoint"    onclick="setShape('point')"   class="active">● Point</button>
     <button id="btnTriangle" onclick="setShape('triangle')"            >▲ Triangle</button>
     <button id="btnCircle"   onclick="setShape('circle')"              >⬤ Circle</button>
+    <button id="btnDropper"  onclick="setShape('dropper')"             >◎ Dropper</button>
     <button onclick="drawFox()" style="border-color:#e07030;color:#e07030;">🦊 Draw Fox</button>
     <button onclick="clearCanvas()">✕ Clear</button>
   </div>
@@ -106,10 +107,15 @@
 
   <p class="note">
     <b>Paint:</b> click or drag the canvas to draw. Switch brush shape with buttons above.<br>
-    <b>Fox:</b> renders the E.P. Fox drawing from WebGL triangles (30+ tris, initials included).<br>
-    <b>✨ Awesomeness:</b> Smooth stroke interpolation — gaps between mouse positions are filled
-    automatically so strokes look continuous, not dotted. Try dragging fast!
+    <b>Fox:</b> 28 WebGL triangles. Initials: the two pointed <b>E</b>ars = E, the :P mouth + tongue = P.<br>
+    <b>Awesomeness:</b> stroke interpolation (drag fast -- gaps fill in automatically)
+    + eyedropper (◎ Dropper button samples any color off the canvas).
   </p>
+
+  <!-- Reference sketch for the fox drawing (photo of graph paper sketch) -->
+  <p style="font-size:11px;color:#888;margin-top:4px;">Fox drawing — planning reference (graph paper sketch):</p>
+  <img src="fox_sketch.jpeg" alt="Fox planning sketch on graph paper"
+       style="width:380px;border:1.5px solid #333;border-radius:4px;display:block;"/>
 
   <script src="Point.js"></script>
   <script src="Triangle.js"></script>

@@ -1,14 +1,17 @@
-// Point.js  —  Point shape class
+// Point.js -- point shape class
 
 class Point {
   constructor(position, color, size) {
     this.position = position; // [x, y]
     this.color    = color;    // [r, g, b, a]
-    this.size     = size;     // gl_PointSize
+    this.size     = size;
   }
 
   render() {
-    // Set color and size uniforms, then draw a single point
+    // disableVertexAttribArray so vertexAttrib3f works correctly --
+    // if a Triangle was drawn before this, the attrib array is still
+    // enabled and will override gl.vertexAttrib3f unless we turn it off
+    gl.disableVertexAttribArray(a_Position);
     gl.uniform4f(u_FragColor, this.color[0], this.color[1], this.color[2], this.color[3]);
     gl.uniform1f(u_Size, this.size);
     gl.vertexAttrib3f(a_Position, this.position[0], this.position[1], 0.0);

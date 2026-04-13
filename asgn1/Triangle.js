@@ -1,12 +1,6 @@
-// Triangle.js  —  Triangle shape class + shared drawTriangle utility
+// Triangle.js -- triangle brush class
+// drawTriangle is also used by Circle.js and Fox.js
 
-// ── Shared utility ────────────────────────────────────────────────────────────
-// drawTriangle(vertices, color)
-//   vertices : flat array [x1,y1, x2,y2, x3,y3] in WebGL coords
-//   color    : [r, g, b, a]
-//
-// This function is reused by Circle.js and Fox.js as well.
-// ─────────────────────────────────────────────────────────────────────────────
 function drawTriangle(vertices, color) {
   gl.uniform4f(u_FragColor, color[0], color[1], color[2], color[3]);
 
@@ -20,25 +14,21 @@ function drawTriangle(vertices, color) {
   gl.drawArrays(gl.TRIANGLES, 0, 3);
 }
 
-
-// ── Triangle brush class ──────────────────────────────────────────────────────
 class Triangle {
   constructor(position, color, size) {
-    this.position = position; // [x, y]  — centroid
-    this.color    = color;    // [r, g, b, a]
-    this.size     = size;     // controls how big the triangle is
+    this.position = position; // center [x, y]
+    this.color    = color;
+    this.size     = size;
   }
 
   render() {
     var x = this.position[0];
     var y = this.position[1];
-    var d = this.size / 200; // half-size in WebGL units
-
-    // Equilateral-ish triangle centered on (x, y)
+    var d = this.size / 200;
     drawTriangle(
-      [ x,       y + d,
-        x - d,   y - d,
-        x + d,   y - d ],
+      [ x,     y + d,
+        x - d, y - d,
+        x + d, y - d ],
       this.color
     );
   }
