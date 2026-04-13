@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>E.P. Fox — CSE 160 Asg1</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #111;
+      color: #eee;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px;
+      gap: 10px;
+    }
+    h1 { font-size: 1.2rem; letter-spacing: 2px; color: #e07030; }
+    canvas {
+      border: 2px solid #333;
+      cursor: crosshair;
+      display: block;
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      max-width: 620px;
+    }
+    button {
+      padding: 7px 14px;
+      border: 1.5px solid #444;
+      border-radius: 5px;
+      background: #222;
+      color: #ccc;
+      cursor: pointer;
+      font-size: 13px;
+      transition: background 0.15s;
+    }
+    button:hover { background: #333; }
+    button.active { background: #c04a10; border-color: #e07030; color: #fff; }
+    .slider-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+    label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 11px;
+      color: #888;
+      gap: 3px;
+    }
+    input[type=range] { width: 90px; accent-color: #e07030; }
+    .color-preview {
+      width: 40px; height: 40px;
+      border-radius: 4px;
+      border: 1.5px solid #444;
+    }
+    .note {
+      font-size: 11px;
+      color: #666;
+      text-align: center;
+      max-width: 600px;
+      line-height: 1.6;
+    }
+    .note b { color: #e07030; }
+  </style>
+</head>
+<body>
+  <h1>E.P. FOX — WebGL Paint</h1>
+
+  <canvas id="webgl" width="600" height="600"></canvas>
+
+  <!-- Shape buttons -->
+  <div class="controls">
+    <button id="btnPoint"    onclick="setShape('point')"   class="active">● Point</button>
+    <button id="btnTriangle" onclick="setShape('triangle')"            >▲ Triangle</button>
+    <button id="btnCircle"   onclick="setShape('circle')"              >⬤ Circle</button>
+    <button onclick="drawFox()" style="border-color:#e07030;color:#e07030;">🦊 Draw Fox</button>
+    <button onclick="clearCanvas()">✕ Clear</button>
+  </div>
+
+  <!-- Sliders -->
+  <div class="slider-group">
+    <label>Red
+      <input type="range" id="red" min="0" max="255" value="220" oninput="updateColor()">
+    </label>
+    <label>Green
+      <input type="range" id="green" min="0" max="255" value="60" oninput="updateColor()">
+    </label>
+    <label>Blue
+      <input type="range" id="blue" min="0" max="255" value="10" oninput="updateColor()">
+    </label>
+    <label>Size
+      <input type="range" id="size" min="1" max="60" value="10" oninput="updateSize()">
+    </label>
+    <label>Segments
+      <input type="range" id="segments" min="3" max="64" value="12" oninput="updateSegments()">
+    </label>
+    <div class="color-preview" id="colorPreview"></div>
+  </div>
+
+  <p class="note">
+    <b>Paint:</b> click or drag the canvas to draw. Switch brush shape with buttons above.<br>
+    <b>Fox:</b> renders the E.P. Fox drawing from WebGL triangles (30+ tris, initials included).<br>
+    <b>✨ Awesomeness:</b> Smooth stroke interpolation — gaps between mouse positions are filled
+    automatically so strokes look continuous, not dotted. Try dragging fast!
+  </p>
+
+  <script src="Point.js"></script>
+  <script src="Triangle.js"></script>
+  <script src="Circle.js"></script>
+  <script src="Fox.js"></script>
+  <script src="asg1.js"></script>
+</body>
+</html>
