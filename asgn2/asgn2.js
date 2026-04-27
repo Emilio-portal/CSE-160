@@ -312,7 +312,7 @@ function drawLegChain(ax, ay, az, upperAng, lowerAng, footAng, colUpper, colLowe
   var upperBase = mat().translate(ax, ay, az).rotate(upperAng, 1, 0, 0);
   drawCube(clone(upperBase).translate(-UW/2, -UH, -UW/2).scale(UW, UH, UW), colUpper);
 
-  var lowerBase = clone(upperBase).translate(0, -UH, 0).rotate(lowerAng, 1, 0, 0);
+  var lowerBase = clone(upperBase).translate(0, -UH, 0).rotate(-lowerAng, 1, 0, 0);
   drawCube(clone(lowerBase).translate(-LW/2, -LH, -LW/2).scale(LW, LH, LW), colLower);
 
   var footBase = clone(lowerBase).translate(0, -LH, 0).rotate(footAng, 1, 0, 0);
