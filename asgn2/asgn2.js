@@ -275,10 +275,10 @@ function drawFox() {
   drawCube(clone(headBase).translate(0.10, 0.30, -0.10).scale(0.14, 0.12, 0.08), FOX_DARK);
   drawCube(clone(headBase).translate(0.46, 0.30, -0.10).scale(0.14, 0.12, 0.08), FOX_DARK);
 
-  // ears - dark inner pyramid placed in front of (smaller z offset) the orange outer one
-  drawPyramid(clone(headBase).translate(0.0,  0.62, 0.21).scale(0.22, 0.38, 0.14), FOX_ORANGE);
+  // ears - orange brought closer to dark so the dark clearly peeks out in front
+  drawPyramid(clone(headBase).translate(0.0,  0.62, 0.13).scale(0.22, 0.38, 0.14), FOX_ORANGE);
   drawPyramid(clone(headBase).translate(0.04, 0.64, 0.08).scale(0.14, 0.28, 0.14), FOX_DARK);
-  drawPyramid(clone(headBase).translate(0.48, 0.62, 0.21).scale(0.22, 0.38, 0.14), FOX_ORANGE);
+  drawPyramid(clone(headBase).translate(0.48, 0.62, 0.13).scale(0.22, 0.38, 0.14), FOX_ORANGE);
   drawPyramid(clone(headBase).translate(0.52, 0.64, 0.08).scale(0.14, 0.28, 0.14), FOX_DARK);
 
   // --- tail ---
@@ -289,8 +289,10 @@ function drawFox() {
   var tailBody = clone(tailBase).translate(-0.15, 0.20, 0).rotate(90, 1, 0, 0);
   drawCylinder(clone(tailBody).scale(0.30, 0.70, 0.30), FOX_DKORG);
 
-  // white fluffy tip cylinder
-  var tailTip = clone(tailBase).translate(-0.15, 0.20, 0.7).rotate(90, 1, 0, 0);
+  // white fluffy tip - translate adjusted so center aligns with body cylinder center
+  // center x = 0.5*sx + tx = 0, so tx = -0.5*0.36 = -0.18
+  // center y in tailBase = 0.05, so ty = 0.05 + 0.5*sz = 0.05 + 0.18 = 0.23
+  var tailTip = clone(tailBase).translate(-0.18, 0.23, 0.7).rotate(90, 1, 0, 0);
   drawCylinder(clone(tailTip).scale(0.36, 0.55, 0.36), WHITE);
 
   // --- legs: 4 chains, each 3 joints deep ---
