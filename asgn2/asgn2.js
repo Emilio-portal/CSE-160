@@ -250,8 +250,8 @@ function renderScene() {
 function drawFox() {
   var GY = -0.9; // ground level (bottom of feet)
 
-  // ground plane - thick so it looks solid from any angle
-  drawCube(mat().translate(-6, GY - 0.5, -6).scale(12, 0.5, 12), [0.22, 0.55, 0.12, 1.0]);
+  // ground plane - large and deep so no gaps or see-through from any angle
+  drawCube(mat().translate(-20, GY - 2.0, -20).scale(40, 2.0, 40), [0.22, 0.55, 0.12, 1.0]);
 
   // blob shadow - must sit just ABOVE the ground top surface (GY) to be visible
   drawCube(mat().translate(-0.75, GY + 0.01, -1.0).scale(1.5, 0.02, 2.0), [0.10, 0.26, 0.04, 1.0]);
@@ -271,9 +271,9 @@ function drawFox() {
   // nose - sits in front of muzzle
   drawCube(clone(headBase).translate(0.22, 0.23, -0.28).scale(0.26, 0.18, 0.10), FOX_DARK);
 
-  // eyes - protrude clearly from the head face so they don't z-fight with it
-  drawCube(clone(headBase).translate(0.10, 0.30, -0.10).scale(0.14, 0.12, 0.08), FOX_DARK);
-  drawCube(clone(headBase).translate(0.46, 0.30, -0.10).scale(0.14, 0.12, 0.08), FOX_DARK);
+  // eyes - moved inward so they sit within the face width
+  drawCube(clone(headBase).translate(0.18, 0.30, -0.10).scale(0.14, 0.12, 0.08), FOX_DARK);
+  drawCube(clone(headBase).translate(0.38, 0.30, -0.10).scale(0.14, 0.12, 0.08), FOX_DARK);
 
   // ears - orange brought closer to dark so the dark clearly peeks out in front
   drawPyramid(clone(headBase).translate(0.0,  0.62, 0.13).scale(0.22, 0.38, 0.14), FOX_ORANGE);
