@@ -271,9 +271,10 @@ function drawFox() {
   // nose - sits in front of muzzle
   drawCube(clone(headBase).translate(0.22, 0.23, -0.28).scale(0.26, 0.18, 0.10), FOX_DARK);
 
-  // eyes
-  drawCube(clone(headBase).translate(0.18, 0.40, -0.10).scale(0.14, 0.12, 0.08), FOX_DARK);
-  drawCube(clone(headBase).translate(0.38, 0.40, -0.10).scale(0.14, 0.12, 0.08), FOX_DARK);
+  // eyes - flat disk cylinders (rotate 90°X so the circular cap faces the viewer)
+  // translate math: center_x = 0.5*sx + tx, center_y = -0.5*sz + ty, front_z = tz
+  drawCylinder(clone(headBase).translate(0.105, 0.475, -0.12).rotate(90, 1, 0, 0).scale(0.15, 0.06, 0.15), FOX_DARK);
+  drawCylinder(clone(headBase).translate(0.445, 0.475, -0.12).rotate(90, 1, 0, 0).scale(0.15, 0.06, 0.15), FOX_DARK);
 
   // ears - orange brought closer to dark so the dark clearly peeks out in front
   drawPyramid(clone(headBase).translate(0.0,  0.62, 0.13).scale(0.22, 0.38, 0.14), FOX_ORANGE);
