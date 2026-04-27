@@ -241,7 +241,7 @@ function renderScene() {
   var G = new Matrix4();
   G.rotate(g_globalAngleX, 1, 0, 0);
   G.rotate(g_globalAngleY, 0, 1, 0);
-  G.scale(0.75, 0.75, 0.75);
+  G.scale(0.67, 0.67, 0.67);
   gl.uniformMatrix4fv(u_GlobalRotation, false, G.elements);
 
   drawFox();
@@ -250,11 +250,11 @@ function renderScene() {
 function drawFox() {
   var GY = -0.9; // ground level (bottom of feet)
 
-  // ground plane
-  drawCube(mat().translate(-6, GY - 0.02, -6).scale(12, 0.04, 12), [0.22, 0.55, 0.12, 1.0]);
+  // ground plane - thick so it looks solid from any angle
+  drawCube(mat().translate(-6, GY - 0.5, -6).scale(12, 0.5, 12), [0.22, 0.55, 0.12, 1.0]);
 
-  // simple blob shadow under the fox body
-  drawCube(mat().translate(-0.75, GY - 0.01, -1.0).scale(1.5, 0.015, 2.0), [0.10, 0.28, 0.05, 1.0]);
+  // blob shadow - must sit just ABOVE the ground top surface (GY) to be visible
+  drawCube(mat().translate(-0.75, GY + 0.01, -1.0).scale(1.5, 0.02, 2.0), [0.10, 0.26, 0.04, 1.0]);
 
   // body: spans x[-0.6, 0.6], y[0, 0.7], z[-0.9, 0.9]
   drawCube(mat().translate(-0.6, 0, -0.9).scale(1.2, 0.7, 1.8), FOX_ORANGE);
@@ -265,21 +265,21 @@ function drawFox() {
 
   drawCube(clone(headBase).scale(0.7, 0.65, 0.7), FOX_ORANGE);
 
-  // muzzle protrudes from front face (negative z offset)
-  drawCube(clone(headBase).translate(0.1, 0.02, -0.20).scale(0.5, 0.35, 0.28), FOX_CREAM);
+  // muzzle - keep it entirely in front of the head (z offset + depth < 0) to avoid z-fighting
+  drawCube(clone(headBase).translate(0.1, 0.02, -0.22).scale(0.5, 0.35, 0.20), FOX_CREAM);
 
-  // nose
-  drawCube(clone(headBase).translate(0.22, 0.23, -0.26).scale(0.26, 0.18, 0.12), FOX_DARK);
+  // nose - sits in front of muzzle
+  drawCube(clone(headBase).translate(0.22, 0.23, -0.28).scale(0.26, 0.18, 0.10), FOX_DARK);
 
-  // eyes - small dark cubes sitting on the front face of the head
-  drawCube(clone(headBase).translate(0.10, 0.30, -0.05).scale(0.14, 0.12, 0.05), FOX_DARK);
-  drawCube(clone(headBase).translate(0.46, 0.30, -0.05).scale(0.14, 0.12, 0.05), FOX_DARK);
+  // eyes - protrude clearly from the head face so they don't z-fight with it
+  drawCube(clone(headBase).translate(0.10, 0.30, -0.10).scale(0.14, 0.12, 0.08), FOX_DARK);
+  drawCube(clone(headBase).translate(0.46, 0.30, -0.10).scale(0.14, 0.12, 0.08), FOX_DARK);
 
-  // ears - pyramid shape so they're pointy like a real fox
+  // ears - dark inner pyramid placed in front of (smaller z offset) the orange outer one
   drawPyramid(clone(headBase).translate(0.0,  0.62, 0.21).scale(0.22, 0.38, 0.14), FOX_ORANGE);
-  drawPyramid(clone(headBase).translate(0.04, 0.64, 0.24).scale(0.14, 0.28, 0.08), FOX_DARK);
+  drawPyramid(clone(headBase).translate(0.04, 0.64, 0.08).scale(0.14, 0.28, 0.14), FOX_DARK);
   drawPyramid(clone(headBase).translate(0.48, 0.62, 0.21).scale(0.22, 0.38, 0.14), FOX_ORANGE);
-  drawPyramid(clone(headBase).translate(0.52, 0.64, 0.24).scale(0.14, 0.28, 0.08), FOX_DARK);
+  drawPyramid(clone(headBase).translate(0.52, 0.64, 0.08).scale(0.14, 0.28, 0.14), FOX_DARK);
 
   // --- tail ---
   // tailBase pivot is at the rear of the body; g_tailAngle rotates it up/down
