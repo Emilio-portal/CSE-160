@@ -298,9 +298,9 @@ function drawFox() {
 
   // --- legs: 4 chains, each 3 joints deep ---
   drawLegChain(-0.5, 0, -0.55, g_frontUpperAngle,  g_frontLowerAngle,  g_frontFootAngle,  FOX_ORANGE, FOX_DKORG, FOX_DARK);
-  drawLegChain( 0.2, 0, -0.55, g_frontRUpperAngle, g_frontRLowerAngle, g_frontRFootAngle, FOX_ORANGE, FOX_DKORG, FOX_DARK);
+  drawLegChain( 0.5, 0, -0.55, g_frontRUpperAngle, g_frontRLowerAngle, g_frontRFootAngle, FOX_ORANGE, FOX_DKORG, FOX_DARK);
   drawLegChain(-0.5, 0,  0.55, g_backUpperAngle,   g_backLowerAngle,   g_backFootAngle,   FOX_ORANGE, FOX_DKORG, FOX_DARK);
-  drawLegChain( 0.2, 0,  0.55, g_backRUpperAngle,  g_backRLowerAngle,  g_backRFootAngle,  FOX_ORANGE, FOX_DKORG, FOX_DARK);
+  drawLegChain( 0.5, 0,  0.55, g_backRUpperAngle,  g_backRLowerAngle,  g_backRFootAngle,  FOX_ORANGE, FOX_DKORG, FOX_DARK);
 }
 
 // 3-level hierarchical leg: thigh -> calf -> foot
