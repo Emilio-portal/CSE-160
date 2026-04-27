@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CSE 160 – Assignment 2 | 3D Blocky Fox</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #1a1a22;
+      color: #e8dcc8;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-size: 13px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px;
+      gap: 12px;
+    }
+    h1 { font-size: 18px; letter-spacing: 0.04em; color: #e07820; }
+
+    #layout {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    canvas {
+      display: block;
+      border: 2px solid #e07820;
+      border-radius: 4px;
+      cursor: crosshair;
+    }
+
+    .panel {
+      background: #23232e;
+      border: 1px solid #3a3a4a;
+      border-radius: 6px;
+      padding: 12px 14px;
+      width: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .panel h2 {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #9988aa;
+      border-bottom: 1px solid #3a3a4a;
+      padding-bottom: 6px;
+    }
+
+    .ctrl { display: flex; flex-direction: column; gap: 3px; }
+    .ctrl label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #ccc;
+    }
+    .ctrl label span { color: #e07820; font-variant-numeric: tabular-nums; }
+    .ctrl input[type=range] {
+      width: 100%;
+      accent-color: #e07820;
+      cursor: pointer;
+    }
+
+    .btn-row { display: flex; gap: 8px; }
+    button {
+      flex: 1;
+      padding: 6px 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: opacity 0.15s;
+    }
+    button:hover { opacity: 0.85; }
+    #btn-start { background: #e07820; color: #fff; }
+    #btn-stop  { background: #554; color: #ddd; }
+
+    #fps-row {
+      font-size: 11px;
+      color: #9988aa;
+      display: flex;
+      justify-content: space-between;
+    }
+    #fps { color: #6de; font-variant-numeric: tabular-nums; }
+
+    .hint {
+      font-size: 11px;
+      color: #665577;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <h1>🦊 3D Blocky Fox — CSE 160 Assignment 2</h1>
+
+  <div id="layout">
+    <canvas id="webgl" width="600" height="600"></canvas>
+
+    <div style="display:flex;flex-direction:column;gap:12px;">
+
+      <!-- View -->
+      <div class="panel">
+        <h2>View / Global Rotation</h2>
+        <div class="ctrl">
+          <label>X Rotation <span id="val-angleX">-15</span>°</label>
+          <input type="range" id="sl-angleX" min="-90" max="90" value="-15"
+            oninput="document.getElementById('val-angleX').textContent=this.value">
+        </div>
+        <div class="ctrl">
+          <label>Y Rotation <span id="val-angleY">25</span>°</label>
+          <input type="range" id="sl-angleY" min="-180" max="180" value="25"
+            oninput="document.getElementById('val-angleY').textContent=this.value">
+        </div>
+        <p class="hint">Drag canvas to rotate • Shift-click to poke</p>
+      </div>
+
+      <!-- Front-left leg (3 levels) -->
+      <div class="panel">
+        <h2>Front-Left Leg Chain</h2>
+        <div class="ctrl">
+          <label>Upper (thigh) <span id="val-fU">0</span>°</label>
+          <input type="range" id="sl-frontUpper" min="-60" max="60" value="0"
+            oninput="document.getElementById('val-fU').textContent=this.value">
+        </div>
+        <div class="ctrl">
+          <label>Lower (calf) <span id="val-fL">0</span>°</label>
+          <input type="range" id="sl-frontLower" min="0" max="110" value="0"
+            oninput="document.getElementById('val-fL').textContent=this.value">
+        </div>
+        <div class="ctrl">
+          <label>Foot <span id="val-fF">0</span>°</label>
+          <input type="range" id="sl-frontFoot" min="-40" max="60" value="0"
+            oninput="document.getElementById('val-fF').textContent=this.value">
+        </div>
+      </div>
+
+      <!-- Back-left leg (3 levels) -->
+      <div class="panel">
+        <h2>Back-Left Leg Chain</h2>
+        <div class="ctrl">
+          <label>Upper (thigh) <span id="val-bU">0</span>°</label>
+          <input type="range" id="sl-backUpper" min="-60" max="60" value="0"
+            oninput="document.getElementById('val-bU').textContent=this.value">
+        </div>
+        <div class="ctrl">
+          <label>Lower (calf) <span id="val-bL">0</span>°</label>
+          <input type="range" id="sl-backLower" min="0" max="110" value="0"
+            oninput="document.getElementById('val-bL').textContent=this.value">
+        </div>
+        <div class="ctrl">
+          <label>Foot <span id="val-bF">0</span>°</label>
+          <input type="range" id="sl-backFoot" min="-40" max="60" value="0"
+            oninput="document.getElementById('val-bF').textContent=this.value">
+        </div>
+      </div>
+
+      <!-- Tail + animation -->
+      <div class="panel">
+        <h2>Tail &amp; Animation</h2>
+        <div class="ctrl">
+          <label>Tail angle <span id="val-tail">30</span>°</label>
+          <input type="range" id="sl-tail" min="-45" max="75" value="30"
+            oninput="document.getElementById('val-tail').textContent=this.value">
+        </div>
+        <div class="btn-row">
+          <button id="btn-start">▶ Start</button>
+          <button id="btn-stop">■ Stop</button>
+        </div>
+        <div id="fps-row">
+          <span>Performance:</span>
+          <span><span id="fps">—</span> fps</span>
+        </div>
+      </div>
+
+    </div><!-- end right column -->
+  </div><!-- end layout -->
+
+  <script src="lib/cuon-matrix-cse160.js"></script>
+  <script src="Cube.js"></script>
+  <script src="asgn2.js"></script>
+  <script>main();</script>
+</body>
+</html>
