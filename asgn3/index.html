@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CSE 160 – Assignment 3 | First-Person World</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #1a1a22;
+      color: #e8dcc8;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px;
+      gap: 10px;
+    }
+    h1 { font-size: 17px; color: #e07820; letter-spacing: 0.04em; }
+
+    #wrap { position: relative; display: inline-block; }
+
+    canvas {
+      display: block;
+      border: 2px solid #e07820;
+      border-radius: 4px;
+      cursor: crosshair;
+    }
+
+    /* crosshair */
+    #crosshair {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      color: white;
+      font-size: 20px;
+      text-shadow: 0 0 3px black;
+      line-height: 1;
+    }
+
+    /* HUD */
+    #hud {
+      position: absolute;
+      top: 10px; left: 10px;
+      background: rgba(0,0,0,0.55);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    /* win screen */
+    #win {
+      display: none;
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.8);
+      padding: 20px 30px;
+      border-radius: 10px;
+      font-size: 18px;
+      text-align: center;
+      color: #ffd700;
+      border: 2px solid #ffd700;
+    }
+
+    /* fps */
+    #fps-bar {
+      position: absolute;
+      bottom: 8px; right: 10px;
+      background: rgba(0,0,0,0.45);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      color: #6de;
+    }
+
+    .hint {
+      font-size: 11px;
+      color: #776688;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>First-Person World — CSE 160 Assignment 3</h1>
+
+  <div id="wrap">
+    <canvas id="webgl" width="800" height="600"></canvas>
+
+    <div id="crosshair">+</div>
+
+    <div id="hud">
+      <b>Find the 3 lost foxes!</b><br>
+      Foxes found: <span id="foxcount">0</span> / 3<br>
+      <span style="font-size:11px;color:#aaa;">
+        W/A/S/D move &nbsp;|&nbsp; Q/E turn &nbsp;|&nbsp;
+        Click=remove block &nbsp;|&nbsp; Right-click=add block
+      </span>
+    </div>
+
+    <div id="win">
+      🦊 You found all 3 foxes! 🦊<br><br>
+      <span style="font-size:14px;color:#fff;">You win!</span>
+    </div>
+
+    <div id="fps-bar"><span id="fps">—</span> fps</div>
+  </div>
+
+  <p class="hint">Hold mouse button + drag to look around</p>
+
+  <div style="font-size:11px;color:#666;margin-top:4px;">
+    Emilio Portal &nbsp;|&nbsp; eportal@ucsc.edu
+  </div>
+
+  <script src="lib/cuon-matrix-cse160.js"></script>
+  <script src="camera.js"></script>
+  <script src="asgn3.js"></script>
+  <script>main();</script>
+
+</body>
+</html>
