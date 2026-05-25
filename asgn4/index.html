@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CSE 160 – Assignment 4 | Phong Lighting</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #1a1a22;
+      color: #e8dcc8;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px;
+      gap: 10px;
+    }
+    h1 { font-size: 17px; color: #e07820; letter-spacing: 0.04em; }
+
+    #wrap { position: relative; display: inline-block; }
+
+    canvas {
+      display: block;
+      border: 2px solid #e07820;
+      border-radius: 4px;
+      cursor: crosshair;
+    }
+
+    #crosshair {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      color: white;
+      font-size: 20px;
+      text-shadow: 0 0 3px black;
+      line-height: 1;
+    }
+
+    #hud {
+      position: absolute;
+      top: 10px; left: 10px;
+      background: rgba(0,0,0,0.55);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    #win {
+      display: none;
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.8);
+      padding: 20px 30px;
+      border-radius: 10px;
+      font-size: 18px;
+      text-align: center;
+      color: #ffd700;
+      border: 2px solid #ffd700;
+    }
+
+    #fps-bar {
+      position: absolute;
+      bottom: 8px; right: 10px;
+      background: rgba(0,0,0,0.45);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      color: #6de;
+    }
+
+    #controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 16px;
+      align-items: center;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid #444;
+      border-radius: 6px;
+      padding: 10px 14px;
+      max-width: 800px;
+      width: 100%;
+    }
+
+    #controls button {
+      background: #2a2a36;
+      border: 1px solid #666;
+      color: #e8dcc8;
+      padding: 5px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    #controls button:hover { border-color: #e07820; color: #e07820; }
+
+    .ctrl-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #aaa;
+    }
+    .ctrl-row input[type=range] { width: 90px; }
+    .ctrl-row label { min-width: 72px; }
+
+    .hint {
+      font-size: 11px;
+      color: #776688;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Phong Lighting World — CSE 160 Assignment 4</h1>
+
+  <div id="wrap">
+    <canvas id="webgl" width="800" height="560"></canvas>
+    <div id="crosshair">+</div>
+    <div id="hud">
+      <b>Find the 3 foxes!</b><br>
+      Found: <span id="foxcount">0</span> / 3<br>
+      <span style="font-size:11px;color:#aaa;">W/A/S/D move &nbsp;|&nbsp; Q/E turn &nbsp;|&nbsp; drag to look</span>
+    </div>
+    <div id="win">
+      You found all 3 foxes!<br>
+      <span style="font-size:14px;color:#fff;">You win!</span>
+    </div>
+    <div id="fps-bar"><span id="fps">—</span> fps</div>
+  </div>
+
+  <div id="controls">
+    <button id="btnLight">Light: ON</button>
+    <button id="btnNorm">Normals: OFF</button>
+    <button id="btnSpot">Spotlight: OFF</button>
+
+    <div class="ctrl-row">
+      <label>Light Angle</label>
+      <input id="sliderAngle" type="range" min="-180" max="180" value="0">
+    </div>
+    <div class="ctrl-row">
+      <label>Light Height</label>
+      <input id="sliderHeight" type="range" min="1" max="15" value="6" step="0.5">
+    </div>
+    <div class="ctrl-row">
+      <label>Light R</label>
+      <input id="sliderR" type="range" min="0" max="1" value="1" step="0.05">
+    </div>
+    <div class="ctrl-row">
+      <label>Light G</label>
+      <input id="sliderG" type="range" min="0" max="1" value="1" step="0.05">
+    </div>
+    <div class="ctrl-row">
+      <label>Light B</label>
+      <input id="sliderB" type="range" min="0" max="1" value="1" step="0.05">
+    </div>
+  </div>
+
+  <p class="hint">Yellow cube = point light &nbsp;|&nbsp; Orange cube = spotlight &nbsp;|&nbsp; Red/blue spheres and green gem in open areas</p>
+  <div style="font-size:11px;color:#666;margin-top:2px;">Emilio Portal &nbsp;|&nbsp; eportal@ucsc.edu</div>
+
+  <script src="lib/cuon-matrix-cse160.js"></script>
+  <script src="camera.js"></script>
+  <script src="asgn4.js"></script>
+  <script>main();</script>
+
+</body>
+</html>
