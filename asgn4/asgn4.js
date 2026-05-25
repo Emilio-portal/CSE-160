@@ -94,11 +94,6 @@ var g_camera;
 var g_keys = {};
 var g_lastMouseX = -1, g_lastMouseY = -1, g_mouseDown = false;
 
-var g_foxesFound = 0;
-var g_foxPositions = [[9,0,9],[24,0,10],[16,0,25]];
-var g_foxFound = [false, false, false];
-var g_won = false;
-
 var g_worldBuffer = null;
 var g_worldVertCount = 0;
 
@@ -120,41 +115,29 @@ var g_spotPos     = [16, 10, 16];
 var g_spotDir     = [0, -1, 0];
 var g_spotCutoff  = 0.9;
 
-// ── 32×32 map ─────────────────────────────────────────────────────────────────
-var g_map = [
-  [4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
-  [4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4],
-  [4,0,2,2,2,0,0,0,0,0,3,3,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4],
-  [4,0,2,0,0,0,0,0,0,0,3,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4],
-  [4,0,2,0,0,0,0,0,0,0,3,0,0,3,0,0,0,4,4,4,4,0,0,0,0,0,0,0,0,0,0,4],
-  [4,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,4,0,0,4,0,0,0,0,0,0,0,0,0,0,4],
-  [4,0,0,0,0,0,0,0,0,0,3,3,0,3,3,0,0,4,0,0,4,0,0,0,0,0,0,0,0,0,0,4],
-  [4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,4,0,0,0,0,0,0,0,0,0,0,4],
-  [4,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,4,4,4,4,0,0,0,0,0,0,0,0,0,0,4],
-  [4,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4],
-  [4,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,3,3,3,3,0,0,0,0,4],
-  [4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,3,0,0,0,0,4],
-  [4,0,0,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,3,0,0,0,0,4],
-  [4,0,0,2,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,3,3,3,3,3,0,0,0,0,4],
-  [4,0,0,2,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4],
-  [4,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4],
-  [4,0,0,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4],
-  [4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4],
-  [4,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4],
-  [4,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,4,4,4,4,4,4,0,0,4],
-  [4,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,4,0,0,0,0,4,0,0,4],
-  [4,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,4,0,0,0,0,4,0,0,4],
-  [4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,4,0,0,4],
-  [4,0,0,0,3,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,4,0,0,4],
-  [4,0,0,0,3,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,4,0,4,4,4,0,0,4],
-  [4,0,0,0,3,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4],
-  [4,0,0,0,3,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4],
-  [4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4],
-  [4,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,4],
-  [4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4],
-  [4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4],
-  [4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
-];
+// ── 32×32 arena map ───────────────────────────────────────────────────────────
+function buildArenaMap() {
+  let m = Array.from({length: 32}, () => new Array(32).fill(0));
+  // outer perimeter height 4
+  for (let i = 0; i < 32; i++) {
+    m[0][i] = 4; m[31][i] = 4;
+    m[i][0] = 4; m[i][31] = 4;
+  }
+  // 2×2 corner pillars height 3
+  for (let dz of [2, 3]) {
+    for (let dx of [2, 3]) {
+      m[dz][dx] = 3;       m[dz][31-dx] = 3;
+      m[31-dz][dx] = 3;    m[31-dz][31-dx] = 3;
+    }
+  }
+  // mid-wall single pillars height 3
+  m[1][15] = 3;  m[1][16] = 3;
+  m[30][15] = 3; m[30][16] = 3;
+  m[15][1] = 3;  m[16][1] = 3;
+  m[15][30] = 3; m[16][30] = 3;
+  return m;
+}
+var g_map = buildArenaMap();
 
 // ── Cube verts with normals (8 floats: x y z u v nx ny nz) ───────────────────
 function cubeVertsWithNormal(x, y, z) {
@@ -362,30 +345,6 @@ function drawCubeImmediate(M, color, texNum) {
   gl.drawArrays(gl.TRIANGLES, 0, 36);
 }
 
-// ── Animal: blocky fox (5 cubes) ──────────────────────────────────────────────
-function drawAnimal(wx, wz, t) {
-  let bob = Math.sin(t * 2) * 0.05;
-
-  let bodyM = new Matrix4();
-  bodyM.setTranslate(wx + 0.25, 0.5 + bob, wz + 0.25);
-  bodyM.scale(0.5, 0.4, 0.7);
-  drawCubeImmediate(bodyM, [0.90, 0.45, 0.10, 1], -2);
-
-  let headM = new Matrix4();
-  headM.setTranslate(wx + 0.3, 0.9 + bob, wz + 0.7);
-  headM.scale(0.4, 0.4, 0.4);
-  drawCubeImmediate(headM, [0.90, 0.45, 0.10, 1], -2);
-
-  for (let lx of [0.27, 0.47]) {
-    for (let lz of [0.28, 0.55]) {
-      let swing = (lx + lz > 1) ? Math.sin(t * 4) * 0.08 : Math.sin(t * 4 + Math.PI) * 0.08;
-      let legM = new Matrix4();
-      legM.setTranslate(wx + lx, 0.1 + swing + bob, wz + lz);
-      legM.scale(0.15, 0.4, 0.15);
-      drawCubeImmediate(legM, [0.70, 0.28, 0.04, 1], -2);
-    }
-  }
-}
 
 // ── Render ────────────────────────────────────────────────────────────────────
 var g_startTime = performance.now() / 1000;
@@ -459,24 +418,19 @@ function renderScene() {
   bindPointers();
   gl.drawArrays(gl.TRIANGLES, 0, g_worldVertCount);
 
-  // ── animals ─
-  for (let i = 0; i < 3; i++) {
-    if (!g_foxFound[i]) drawAnimal(g_foxPositions[i][0], g_foxPositions[i][2], g_time);
-  }
-
   // ── spheres ─
   gl.bindBuffer(gl.ARRAY_BUFFER, g_sphereBuffer);
   bindPointers();
 
   let sM1 = new Matrix4();
-  sM1.setTranslate(5, 1.5, 5);
+  sM1.setTranslate(12, 1.5, 14);
   sM1.scale(1.5, 1.5, 1.5);
   setUniforms([0.8, 0.15, 0.1, 1], -2, sM1);
   gl.drawArrays(gl.TRIANGLES, 0, g_sphereVertCount);
 
   let sM2 = new Matrix4();
-  sM2.setTranslate(27, 1.5, 5);
-  sM2.scale(1.2, 1.2, 1.2);
+  sM2.setTranslate(19, 1.5, 14);
+  sM2.scale(1.5, 1.5, 1.5);
   setUniforms([0.1, 0.3, 0.8, 1], -2, sM2);
   gl.drawArrays(gl.TRIANGLES, 0, g_sphereVertCount);
 
@@ -485,8 +439,8 @@ function renderScene() {
     gl.bindBuffer(gl.ARRAY_BUFFER, g_objBuffer);
     bindPointers();
     let gemM = new Matrix4();
-    gemM.setTranslate(20, 1.5, 5);
-    gemM.scale(1.2, 1.2, 1.2);
+    gemM.setTranslate(15.2, 1.5, 9);
+    gemM.scale(1.4, 1.4, 1.4);
     setUniforms([0.3, 0.9, 0.5, 1], -2, gemM);
     gl.drawArrays(gl.TRIANGLES, 0, g_objVertCount);
   }
@@ -507,25 +461,6 @@ function renderScene() {
   // restore
   uploadLightingUniforms();
 
-  // ── fox proximity / win ─
-  if (!g_won) {
-    for (let i = 0; i < 3; i++) {
-      if (!g_foxFound[i]) {
-        let dx = e[0] - g_foxPositions[i][0] - 0.5;
-        let dz = e[2] - g_foxPositions[i][2] - 0.5;
-        if (Math.sqrt(dx*dx + dz*dz) < 1.5) {
-          g_foxFound[i] = true;
-          g_foxesFound++;
-          document.getElementById('foxcount').textContent = g_foxesFound;
-        }
-      }
-    }
-    if (g_foxesFound === 3) {
-      g_won = true;
-      document.getElementById('hud').style.display = 'none';
-      document.getElementById('win').style.display = 'block';
-    }
-  }
 }
 
 // ── Input ─────────────────────────────────────────────────────────────────────
