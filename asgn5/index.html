@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CSE 160 – Assignment 5 | Solar System Explorer</title>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0a0a12;
+      color: #e8dcc8;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      overflow: hidden;
+    }
+
+    #canvas-container {
+      position: fixed;
+      inset: 0;
+    }
+
+    /* Top-left HUD */
+    #hud {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      background: rgba(0, 0, 0, 0.65);
+      border: 1px solid #333;
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-size: 12px;
+      line-height: 1.9;
+      color: #aaa;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    #hud .key {
+      display: inline-block;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid #555;
+      border-radius: 3px;
+      padding: 0 5px;
+      font-size: 11px;
+      color: #ccc;
+    }
+
+    /* Planet info panel */
+    #planet-panel {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(6, 6, 18, 0.90);
+      border: 1px solid #e07820;
+      border-radius: 8px;
+      padding: 18px 26px 16px;
+      min-width: 340px;
+      display: none;
+      pointer-events: auto;
+      backdrop-filter: blur(6px);
+    }
+
+    #planet-panel h2 {
+      color: #e07820;
+      font-size: 19px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      letter-spacing: 0.03em;
+    }
+
+    #planet-panel table {
+      font-size: 13px;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    #planet-panel td {
+      padding: 3px 12px 3px 0;
+      vertical-align: top;
+    }
+
+    #planet-panel td:first-child {
+      color: #888;
+      white-space: nowrap;
+      width: 130px;
+    }
+
+    #planet-panel td:last-child {
+      color: #ddd;
+    }
+
+    #close-btn {
+      position: absolute;
+      top: 10px;
+      right: 14px;
+      background: none;
+      border: none;
+      color: #666;
+      font-size: 18px;
+      cursor: pointer;
+      line-height: 1;
+      transition: color 0.15s;
+    }
+
+    #close-btn:hover { color: #e07820; }
+
+    /* FPS counter */
+    #fps-bar {
+      position: fixed;
+      bottom: 10px;
+      right: 14px;
+      background: rgba(0, 0, 0, 0.45);
+      border-radius: 4px;
+      padding: 4px 8px;
+      font-size: 11px;
+      color: #6de;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* Attribution */
+    #attr {
+      position: fixed;
+      bottom: 10px;
+      left: 14px;
+      font-size: 11px;
+      color: #444;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* Wow label in top-right */
+    #wow-label {
+      position: fixed;
+      top: 12px;
+      right: 14px;
+      background: rgba(0,0,0,0.55);
+      border: 1px solid #e07820;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 11px;
+      color: #e07820;
+      pointer-events: none;
+      user-select: none;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="canvas-container"></div>
+
+  <div id="hud">
+    <span class="key">Drag</span> Orbit &nbsp;|&nbsp; <span class="key">Scroll</span> Zoom<br>
+    <span class="key">Click</span> Focus planet &nbsp;|&nbsp; <span class="key">Esc</span> Return
+  </div>
+
+  <div id="wow-label">
+    ✦ WOW: Click any planet<br>to focus &amp; read info
+  </div>
+
+  <div id="planet-panel">
+    <button id="close-btn">&#x2715;</button>
+    <h2 id="planet-name">Planet</h2>
+    <table>
+      <tr><td>Diameter</td><td id="pd-diameter">—</td></tr>
+      <tr><td>Distance from Sun</td><td id="pd-distance">—</td></tr>
+      <tr><td>Orbital Period</td><td id="pd-period">—</td></tr>
+      <tr><td>Fun Fact</td><td id="pd-fact">—</td></tr>
+    </table>
+  </div>
+
+  <div id="fps-bar"><span id="fps">—</span> fps</div>
+  <div id="attr">Emilio Portal &nbsp;|&nbsp; eportal@ucsc.edu &nbsp;|&nbsp; CSE 160 – Assignment 5</div>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>
